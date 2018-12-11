@@ -1,3 +1,4 @@
+
 //  Copyright 2018 seekloud (https://github.com/seekloud)
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +39,10 @@ message Credit{
   string api_token = 2;
 }
 
-
+message CreateRoomReq{
+  Credit credit = 1;
+  string password = 2;
+}
 
 message CreateRoomRsp {
   string room_id = 1;
@@ -50,8 +54,9 @@ message CreateRoomRsp {
 
 
 message JoinRoomReq {
-  string room_id = 1;
-  Credit credit = 15;
+  Credit credit = 1;
+  string password = 2;
+  string room_id = 3;
 }
 
 
@@ -65,7 +70,7 @@ message ActionReq {
 }
 
 message ActionRsp {
-  int32 frame_index = 12;
+  int64 frame_index = 12;
   int32 err_code = 13;
   State state = 14;
   string msg = 15;
@@ -76,7 +81,7 @@ message ObservationRsp {
   LayeredObservation layered_observation = 1;
   ImgData human_observation = 2;
 
-  int32 frame_index = 12;
+  int64 frame_index = 12;
   int32 err_code = 13;
   State state = 14;
   string msg = 15;
@@ -88,7 +93,7 @@ message InformRsp {
   int32 kills = 2;
   int32 heath = 3;
 
-  int32 frame_index = 12;
+  int64 frame_index = 12;
   int32 err_code = 13;
   State state = 14;
   string msg = 15;

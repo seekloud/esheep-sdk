@@ -16,7 +16,7 @@ class EsheepAgentStub(object):
     """
     self.createRoom = channel.unary_unary(
         '/org.seekloud.esheepapi.pb.EsheepAgent/createRoom',
-        request_serializer=api__pb2.Credit.SerializeToString,
+        request_serializer=api__pb2.CreateRoomReq.SerializeToString,
         response_deserializer=api__pb2.CreateRoomRsp.FromString,
         )
     self.joinRoom = channel.unary_unary(
@@ -109,7 +109,7 @@ def add_EsheepAgentServicer_to_server(servicer, server):
   rpc_method_handlers = {
       'createRoom': grpc.unary_unary_rpc_method_handler(
           servicer.createRoom,
-          request_deserializer=api__pb2.Credit.FromString,
+          request_deserializer=api__pb2.CreateRoomReq.FromString,
           response_serializer=api__pb2.CreateRoomRsp.SerializeToString,
       ),
       'joinRoom': grpc.unary_unary_rpc_method_handler(
