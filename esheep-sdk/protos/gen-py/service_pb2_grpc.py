@@ -49,6 +49,11 @@ class EsheepAgentStub(object):
         request_serializer=api__pb2.Credit.SerializeToString,
         response_deserializer=api__pb2.InformRsp.FromString,
         )
+    self.reincarnation = channel.unary_unary(
+        '/org.seekloud.esheepapi.pb.EsheepAgent/reincarnation',
+        request_serializer=api__pb2.Credit.SerializeToString,
+        response_deserializer=api__pb2.SimpleRsp.FromString,
+        )
 
 
 class EsheepAgentServicer(object):
@@ -104,6 +109,13 @@ class EsheepAgentServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def reincarnation(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_EsheepAgentServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -141,6 +153,11 @@ def add_EsheepAgentServicer_to_server(servicer, server):
           servicer.inform,
           request_deserializer=api__pb2.Credit.FromString,
           response_serializer=api__pb2.InformRsp.SerializeToString,
+      ),
+      'reincarnation': grpc.unary_unary_rpc_method_handler(
+          servicer.reincarnation,
+          request_deserializer=api__pb2.Credit.FromString,
+          response_serializer=api__pb2.SimpleRsp.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

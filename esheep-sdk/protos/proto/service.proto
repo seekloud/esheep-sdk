@@ -23,5 +23,6 @@ service EsheepAgent {
 
   rpc inform (Credit) returns (InformRsp);
 
+  rpc reincarnation (Credit) returns (SimpleRsp);
 
 }
