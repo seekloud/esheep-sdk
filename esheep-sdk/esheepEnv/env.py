@@ -103,3 +103,12 @@ class Environment:
             return response
         else:
             return []
+
+    def reincarnation(self):
+        response = self.stub.inform(
+            messages.Credit(player_id=self.player_id, api_token=self.api_token)
+        )
+        if response:
+            return response
+        else:
+            return []
