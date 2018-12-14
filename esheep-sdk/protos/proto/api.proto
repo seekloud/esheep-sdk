@@ -35,8 +35,7 @@ enum State {
 
 
 message Credit{
-  string player_id = 1;
-  string api_token = 2;
+  string api_token = 1;
 }
 
 message CreateRoomReq{
