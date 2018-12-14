@@ -103,8 +103,8 @@ class Environment:
     def submit_action(self, move, swing, fire, apply):
         response = self.stub.action(
             messages.ActionReq(
-                move=action.Move(move),
-                Swing=action.Swing(radian=swing[0], distance=swing[1]),
+                move=move,
+                swing=swing,
                 fire=fire,
                 apply=apply,
                 credit=messages.Credit(api_token=self.api_token)
