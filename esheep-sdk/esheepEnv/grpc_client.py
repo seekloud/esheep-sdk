@@ -3,10 +3,9 @@ import datetime
 import grpc
 import service_pb2_grpc as service
 import api_pb2 as messages
-import actions_pb2 as action
 
 
-class Environment:
+class GrpcClient:
     def __init__(self, ip, port, api_token, logfile_path='./', debug=False):
 
         if debug:
@@ -36,7 +35,6 @@ class Environment:
         )
         if response:
             if self.debug:
-                print("??????")
                 self.log_file.write("create_room response," + "\t" +
                                     "errCode:" + str(response.err_code) + "\t" +
                                     "msg:" + str(response.msg) + "\t" +
@@ -174,4 +172,21 @@ class Environment:
         else:
             if self.debug:
                 self.log_file.write("submit_reincarnation error:can't get response." + "\n")
+            return []
+
+    def get_system_info(self):
+        response = self.stub.systemInfo(
+            messages.Credit(api_token=self.api_token)
+        )
+        if response:
+            if self.debug:
+                self.log_file.write("get_system_info response," + "\t" +
+                                    "errCode:" + str(response.err_code) + "\t" +
+                                    "msg:" + str(response.msg) + "\t" +
+                                    "state:" + str(response.state) + "\t" +
+                                    "framePeriod:" + str(response.framePeriod) + "\n")
+            return response
+        else:
+            if self.debug:
+                self.log_file.write("get_system_info error:can't get response." + "\n")
             return []

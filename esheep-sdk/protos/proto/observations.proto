@@ -29,13 +29,14 @@ package org.seekloud.esheepapi.pb;
 
 message LayeredObservation {
 
-  ImgData location_in_map = 1;
-  ImgData background = 2;
-  ImgData things = 3;
-  ImgData players = 4;
-  ImgData self_player = 5;
-  ImgData states = 6;
-
+  ImgData location = 1;
+  ImgData immutable_element = 2;
+  ImgData mutable_element = 3;
+  ImgData bodies = 4;
+  ImgData asset_ownership = 5;
+  ImgData self_asset = 6;
+  ImgData self_status = 7;
+  ImgData pointer = 8;
 
 }
 

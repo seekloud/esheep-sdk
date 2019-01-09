@@ -1,4 +1,4 @@
-from env import Environment
+from grpc_client import GrpcClient
 import actions_pb2 as action
 import api_pb2 as api
 import time
@@ -10,9 +10,9 @@ port = '5322'
 
 
 def run():
-    env = Environment(ip=ip,
+    env = GrpcClient(ip=ip,
                       port=port,
-                      api_token="")
+                      api_token="test")
 
     rsp = env.create_room("123")
     print(rsp.room_id)
@@ -26,7 +26,7 @@ def run():
             print('in_game')
             actionIndex = random.randint(0, 3)
             actionChoose = actionList[actionIndex]
-            actionRsp = env.submit_action(actionChoose, action.Swing(), None, None)
+            actionRsp = env.submit_action(actionChoose, None, None, None)
             print(actionRsp)
         elif obs.state == api.killed:
             print('killed')
@@ -34,13 +34,11 @@ def run():
             print(rsp)
         else:
             print('cannot get state:', obs.state)
-        # print(obs.human_observation.pixel_length)
-        # print(obs.human_observation.background.pixel_length)
-        # print(obs.human_observation.things.pixel_length)
-        # print(obs.human_observation.players.pixel_length)
-        # print(obs.human_observation.self_player.pixel_length)
-        # print(obs.human_observation.states.pixel_length)
-        # print(obs.frame_index)
+        print("\n")
+        print(str(obs.human_observation.width) + "\n")
+        print(str(obs.human_observation.height) + "\n")
+        print(str(obs.human_observation.pixel_length) + "\n")
+        print(str(type(obs.human_observation.data)) + "\n")
 
         time.sleep(0.15)
 
