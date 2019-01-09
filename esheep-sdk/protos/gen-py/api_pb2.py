@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='org.seekloud.esheepapi.pb',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\tapi.proto\x12\x19org.seekloud.esheepapi.pb\x1a\ractions.proto\x1a\x12observations.proto\"\x1b\n\x06\x43redit\x12\x11\n\tapi_token\x18\x01 \x01(\t\"T\n\rCreateRoomReq\x12\x31\n\x06\x63redit\x18\x01 \x01(\x0b\x32!.org.seekloud.esheepapi.pb.Credit\x12\x10\n\x08password\x18\x02 \x01(\t\"p\n\rCreateRoomRsp\x12\x0f\n\x07room_id\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"c\n\x0bJoinRoomReq\x12\x31\n\x06\x63redit\x18\x01 \x01(\x0b\x32!.org.seekloud.esheepapi.pb.Credit\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0f\n\x07room_id\x18\x03 \x01(\t\"\xbb\x01\n\tActionReq\x12-\n\x04move\x18\x01 \x01(\x0e\x32\x1f.org.seekloud.esheepapi.pb.Move\x12/\n\x05swing\x18\x02 \x01(\x0b\x32 .org.seekloud.esheepapi.pb.Swing\x12\x0c\n\x04\x66ire\x18\x03 \x01(\x05\x12\r\n\x05\x61pply\x18\x04 \x01(\x05\x12\x31\n\x06\x63redit\x18\x0f \x01(\x0b\x32!.org.seekloud.esheepapi.pb.Credit\"p\n\tActionRsp\x12\x13\n\x0b\x66rame_index\x18\x0c \x01(\x03\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"\x80\x02\n\x0eObservationRsp\x12J\n\x13layered_observation\x18\x01 \x01(\x0b\x32-.org.seekloud.esheepapi.pb.LayeredObservation\x12=\n\x11human_observation\x18\x02 \x01(\x0b\x32\".org.seekloud.esheepapi.pb.ImgData\x12\x13\n\x0b\x66rame_index\x18\x0c \x01(\x03\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"\x9d\x01\n\tInformRsp\x12\r\n\x05score\x18\x01 \x01(\x05\x12\r\n\x05kills\x18\x02 \x01(\x05\x12\r\n\x05heath\x18\x03 \x01(\x05\x12\x13\n\x0b\x66rame_index\x18\x0c \x01(\x03\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"\xbb\x01\n\x0e\x41\x63tionSpaceRsp\x12-\n\x04move\x18\x01 \x03(\x0e\x32\x1f.org.seekloud.esheepapi.pb.Move\x12\r\n\x05swing\x18\x02 \x01(\x08\x12\x0c\n\x04\x66ire\x18\x03 \x03(\x05\x12\r\n\x05\x61pply\x18\x04 \x03(\x05\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"[\n\tSimpleRsp\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t*V\n\x05State\x12\r\n\tinit_game\x10\x00\x12\x0b\n\x07in_game\x10\x01\x12\n\n\x06killed\x10\x02\x12\r\n\tin_replay\x10\x03\x12\t\n\x05\x65nded\x10\x04\x12\x0b\n\x07unknown\x10\x0f\x62\x06proto3')
+  serialized_pb=_b('\n\tapi.proto\x12\x19org.seekloud.esheepapi.pb\x1a\ractions.proto\x1a\x12observations.proto\"\x1b\n\x06\x43redit\x12\x11\n\tapi_token\x18\x01 \x01(\t\"T\n\rCreateRoomReq\x12\x31\n\x06\x63redit\x18\x01 \x01(\x0b\x32!.org.seekloud.esheepapi.pb.Credit\x12\x10\n\x08password\x18\x02 \x01(\t\"p\n\rCreateRoomRsp\x12\x0f\n\x07room_id\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"c\n\x0bJoinRoomReq\x12\x31\n\x06\x63redit\x18\x01 \x01(\x0b\x32!.org.seekloud.esheepapi.pb.Credit\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0f\n\x07room_id\x18\x03 \x01(\t\"\xbb\x01\n\tActionReq\x12-\n\x04move\x18\x01 \x01(\x0e\x32\x1f.org.seekloud.esheepapi.pb.Move\x12/\n\x05swing\x18\x02 \x01(\x0b\x32 .org.seekloud.esheepapi.pb.Swing\x12\x0c\n\x04\x66ire\x18\x03 \x01(\x05\x12\r\n\x05\x61pply\x18\x04 \x01(\x05\x12\x31\n\x06\x63redit\x18\x0f \x01(\x0b\x32!.org.seekloud.esheepapi.pb.Credit\"p\n\tActionRsp\x12\x13\n\x0b\x66rame_index\x18\x0c \x01(\x03\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"\x80\x02\n\x0eObservationRsp\x12J\n\x13layered_observation\x18\x01 \x01(\x0b\x32-.org.seekloud.esheepapi.pb.LayeredObservation\x12=\n\x11human_observation\x18\x02 \x01(\x0b\x32\".org.seekloud.esheepapi.pb.ImgData\x12\x13\n\x0b\x66rame_index\x18\x0c \x01(\x03\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"\x9d\x01\n\tInformRsp\x12\r\n\x05score\x18\x01 \x01(\x05\x12\r\n\x05kills\x18\x02 \x01(\x05\x12\r\n\x05heath\x18\x03 \x01(\x05\x12\x13\n\x0b\x66rame_index\x18\x0c \x01(\x03\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"\xbb\x01\n\x0e\x41\x63tionSpaceRsp\x12-\n\x04move\x18\x01 \x03(\x0e\x32\x1f.org.seekloud.esheepapi.pb.Move\x12\r\n\x05swing\x18\x02 \x01(\x08\x12\x0c\n\x04\x66ire\x18\x03 \x03(\x05\x12\r\n\x05\x61pply\x18\x04 \x03(\x05\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"t\n\rSystemInfoRsp\x12\x13\n\x0b\x66ramePeriod\x18\x01 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t\"[\n\tSimpleRsp\x12\x10\n\x08\x65rr_code\x18\r \x01(\x05\x12/\n\x05state\x18\x0e \x01(\x0e\x32 .org.seekloud.esheepapi.pb.State\x12\x0b\n\x03msg\x18\x0f \x01(\t*V\n\x05State\x12\r\n\tinit_game\x10\x00\x12\x0b\n\x07in_game\x10\x01\x12\n\n\x06killed\x10\x02\x12\r\n\tin_replay\x10\x03\x12\t\n\x05\x65nded\x10\x04\x12\x0b\n\x07unknown\x10\x0f\x62\x06proto3')
   ,
   dependencies=[actions__pb2.DESCRIPTOR,observations__pb2.DESCRIPTOR,])
 
@@ -59,8 +59,8 @@ _STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1411,
-  serialized_end=1497,
+  serialized_start=1529,
+  serialized_end=1615,
 )
 _sym_db.RegisterEnumDescriptor(_STATE)
 
@@ -563,6 +563,58 @@ _ACTIONSPACERSP = _descriptor.Descriptor(
 )
 
 
+_SYSTEMINFORSP = _descriptor.Descriptor(
+  name='SystemInfoRsp',
+  full_name='org.seekloud.esheepapi.pb.SystemInfoRsp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='framePeriod', full_name='org.seekloud.esheepapi.pb.SystemInfoRsp.framePeriod', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='err_code', full_name='org.seekloud.esheepapi.pb.SystemInfoRsp.err_code', index=1,
+      number=13, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='org.seekloud.esheepapi.pb.SystemInfoRsp.state', index=2,
+      number=14, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='msg', full_name='org.seekloud.esheepapi.pb.SystemInfoRsp.msg', index=3,
+      number=15, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1318,
+  serialized_end=1434,
+)
+
+
 _SIMPLERSP = _descriptor.Descriptor(
   name='SimpleRsp',
   full_name='org.seekloud.esheepapi.pb.SimpleRsp',
@@ -603,8 +655,8 @@ _SIMPLERSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1318,
-  serialized_end=1409,
+  serialized_start=1436,
+  serialized_end=1527,
 )
 
 _CREATEROOMREQ.fields_by_name['credit'].message_type = _CREDIT
@@ -620,6 +672,7 @@ _OBSERVATIONRSP.fields_by_name['state'].enum_type = _STATE
 _INFORMRSP.fields_by_name['state'].enum_type = _STATE
 _ACTIONSPACERSP.fields_by_name['move'].enum_type = actions__pb2._MOVE
 _ACTIONSPACERSP.fields_by_name['state'].enum_type = _STATE
+_SYSTEMINFORSP.fields_by_name['state'].enum_type = _STATE
 _SIMPLERSP.fields_by_name['state'].enum_type = _STATE
 DESCRIPTOR.message_types_by_name['Credit'] = _CREDIT
 DESCRIPTOR.message_types_by_name['CreateRoomReq'] = _CREATEROOMREQ
@@ -630,6 +683,7 @@ DESCRIPTOR.message_types_by_name['ActionRsp'] = _ACTIONRSP
 DESCRIPTOR.message_types_by_name['ObservationRsp'] = _OBSERVATIONRSP
 DESCRIPTOR.message_types_by_name['InformRsp'] = _INFORMRSP
 DESCRIPTOR.message_types_by_name['ActionSpaceRsp'] = _ACTIONSPACERSP
+DESCRIPTOR.message_types_by_name['SystemInfoRsp'] = _SYSTEMINFORSP
 DESCRIPTOR.message_types_by_name['SimpleRsp'] = _SIMPLERSP
 DESCRIPTOR.enum_types_by_name['State'] = _STATE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -696,6 +750,13 @@ ActionSpaceRsp = _reflection.GeneratedProtocolMessageType('ActionSpaceRsp', (_me
   # @@protoc_insertion_point(class_scope:org.seekloud.esheepapi.pb.ActionSpaceRsp)
   ))
 _sym_db.RegisterMessage(ActionSpaceRsp)
+
+SystemInfoRsp = _reflection.GeneratedProtocolMessageType('SystemInfoRsp', (_message.Message,), dict(
+  DESCRIPTOR = _SYSTEMINFORSP,
+  __module__ = 'api_pb2'
+  # @@protoc_insertion_point(class_scope:org.seekloud.esheepapi.pb.SystemInfoRsp)
+  ))
+_sym_db.RegisterMessage(SystemInfoRsp)
 
 SimpleRsp = _reflection.GeneratedProtocolMessageType('SimpleRsp', (_message.Message,), dict(
   DESCRIPTOR = _SIMPLERSP,

@@ -34,6 +34,11 @@ class EsheepAgentStub(object):
         request_serializer=api__pb2.Credit.SerializeToString,
         response_deserializer=api__pb2.ActionSpaceRsp.FromString,
         )
+    self.systemInfo = channel.unary_unary(
+        '/org.seekloud.esheepapi.pb.EsheepAgent/systemInfo',
+        request_serializer=api__pb2.Credit.SerializeToString,
+        response_deserializer=api__pb2.SystemInfoRsp.FromString,
+        )
     self.action = channel.unary_unary(
         '/org.seekloud.esheepapi.pb.EsheepAgent/action',
         request_serializer=api__pb2.ActionReq.SerializeToString,
@@ -82,6 +87,13 @@ class EsheepAgentServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def actionSpace(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def systemInfo(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -138,6 +150,11 @@ def add_EsheepAgentServicer_to_server(servicer, server):
           servicer.actionSpace,
           request_deserializer=api__pb2.Credit.FromString,
           response_serializer=api__pb2.ActionSpaceRsp.SerializeToString,
+      ),
+      'systemInfo': grpc.unary_unary_rpc_method_handler(
+          servicer.systemInfo,
+          request_deserializer=api__pb2.Credit.FromString,
+          response_serializer=api__pb2.SystemInfoRsp.SerializeToString,
       ),
       'action': grpc.unary_unary_rpc_method_handler(
           servicer.action,
