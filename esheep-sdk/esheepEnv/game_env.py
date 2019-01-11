@@ -1,6 +1,6 @@
 from grpc_client import GrpcClient
 import threading
-from utils import bytes_to_array
+from utils import to_np_array
 from rw_lock import RWLock
 import time
 
@@ -176,18 +176,18 @@ class RefreshObservation(threading.Thread):
 
         layered_observation = observation_response.layered_observation
 
-        """bytes to numpy"""
-        location = bytes_to_array(layered_observation.location)
-        immutable_element = bytes_to_array(layered_observation.immutable_element)
-        mutable_element = bytes_to_array(layered_observation.mutable_element)
-        bodies = bytes_to_array(layered_observation.bodies)
-        asset_ownership = bytes_to_array(layered_observation.asset_ownership)
-        self_asset = bytes_to_array(layered_observation.self_asset)
-        asset_status = bytes_to_array(layered_observation.self_status)
-        pointer = bytes_to_array(layered_observation.pointer)
+        """to np array"""
+        location = to_np_array(layered_observation.location)
+        immutable_element = to_np_array(layered_observation.immutable_element)
+        mutable_element = to_np_array(layered_observation.mutable_element)
+        bodies = to_np_array(layered_observation.bodies)
+        asset_ownership = to_np_array(layered_observation.asset_ownership)
+        self_asset = to_np_array(layered_observation.self_asset)
+        asset_status = to_np_array(layered_observation.self_status)
+        pointer = to_np_array(layered_observation.pointer)
         human = None
         if self.need_human_ob:
-            human = bytes_to_array(observation_response.humanObservation)
+            human = to_np_array(observation_response.humanObservation)
 
         """write"""
         observation_lock.acquire_write()

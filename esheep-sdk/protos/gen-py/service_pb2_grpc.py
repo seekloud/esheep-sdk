@@ -59,7 +59,7 @@ class EsheepAgentStub(object):
         request_serializer=api__pb2.Credit.SerializeToString,
         response_deserializer=api__pb2.SimpleRsp.FromString,
         )
-    self.currentFrame = channel.unary_unary(
+    self.currentFrame = channel.unary_stream(
         '/org.seekloud.esheepapi.pb.EsheepAgent/currentFrame',
         request_serializer=api__pb2.Credit.SerializeToString,
         response_deserializer=api__pb2.CurrentFrameRsp.FromString,
@@ -188,7 +188,7 @@ def add_EsheepAgentServicer_to_server(servicer, server):
           request_deserializer=api__pb2.Credit.FromString,
           response_serializer=api__pb2.SimpleRsp.SerializeToString,
       ),
-      'currentFrame': grpc.unary_unary_rpc_method_handler(
+      'currentFrame': grpc.unary_stream_rpc_method_handler(
           servicer.currentFrame,
           request_deserializer=api__pb2.Credit.FromString,
           response_serializer=api__pb2.CurrentFrameRsp.SerializeToString,
