@@ -21,7 +21,7 @@ def run():
     # time.sleep(10000)
     actionList = [action.down, action.up, action.left, action.right]
     for i in range(0, 400):
-        obs = env.get_observation()
+        obs = env.get_observations()
         if obs.state == api.in_game:
             print('in_game')
             actionIndex = random.randint(0, 3)

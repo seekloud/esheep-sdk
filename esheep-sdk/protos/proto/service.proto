@@ -27,4 +27,6 @@ service EsheepAgent {
 
   rpc reincarnation (Credit) returns (SimpleRsp);
 
+  rpc currentFrame(Credit) returns (CurrentFrameRsp);
+
 }
