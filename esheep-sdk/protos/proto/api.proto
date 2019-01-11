@@ -111,7 +111,7 @@ message ActionSpaceRsp {
 }
 
 message SystemInfoRsp {
-  int32 framePeriod = 1;
+  int32 frame_period = 1;
 
   int32 err_code = 13;
   State state = 14;
@@ -120,6 +120,14 @@ message SystemInfoRsp {
 
 
 message SimpleRsp{
+  int32 err_code = 13;
+  State state = 14;
+  string msg = 15;
+}
+
+message CurrentFrameRsp {
+  int64 frame = 1;
+
   int32 err_code = 13;
   State state = 14;
   string msg = 15;
