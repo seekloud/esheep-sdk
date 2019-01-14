@@ -85,6 +85,18 @@ message ObservationRsp {
   string msg = 15;
 }
 
+message ObservationWithInfoRsp {
+  LayeredObservation layered_observation = 1;
+  ImgData human_observation = 2;
+  int32 score = 3;
+  int32 kills = 4;
+  int32 heath = 5;
+
+  int64 frame_index = 12;
+  int32 err_code = 13;
+  State state = 14;
+  string msg = 15;
+}
 
 message InformRsp {
   int32 score = 1;

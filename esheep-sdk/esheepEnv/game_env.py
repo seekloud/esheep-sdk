@@ -6,7 +6,6 @@ import time
 
 frame_index = 0
 frame_lock = RWLock()
-observation_lock = RWLock()
 
 human_observation = None
 location_observation = None
@@ -18,6 +17,12 @@ self_asset_observation = None
 asset_status_observation = None
 pointer_observation = None
 observation_state = None
+observation_lock = RWLock()
+
+score_inform = 0
+kill_inform = 0
+heath_inform = 0
+inform_lock = RWLock()
 
 
 class GameEnvironment:
@@ -70,8 +75,7 @@ class GameEnvironment:
         frame_lock.acquire_read()
         current_frame = frame
         frame_lock.release()
-
-        if self.last_action_frame < frame < current_frame - self.max_containable_step:
+        if self.last_action_frame < frame and frame > current_frame - self.max_containable_step:
             rsp = self.grpc_client.submit_action(move, swing, fire, apply)
             if rsp.err_code == 0:
                 self.last_action_frame = frame
@@ -81,7 +85,7 @@ class GameEnvironment:
         else:
             return None
 
-    def get_observation(self):
+    def get_observation_with_info(self):
         """read"""
         observation_lock.acquire_read()
         state = observation_state
@@ -100,6 +104,12 @@ class GameEnvironment:
         frame = frame_index
         frame_lock.release()
 
+        inform_lock.acquire_read()
+        score = score_inform
+        kill = kill_inform
+        heath = heath_inform
+        inform_lock.release()
+
         if self.need_human_ob:
             return frame, \
                    state, \
@@ -111,7 +121,11 @@ class GameEnvironment:
                    self_asset, \
                    asset_status, \
                    pointer, \
-                   human
+                   human, \
+                   score, \
+                   kill, \
+                   heath
+
         else:
             return frame, \
                    state, \
@@ -122,7 +136,10 @@ class GameEnvironment:
                    asset_ownership, \
                    self_asset, \
                    asset_status, \
-                   pointer
+                   pointer, \
+                   score, \
+                   kill, \
+                   heath
 
     def get_move_meanings(self):
         return [MOVE_MEANING[i] for i in self._action_space.move]
@@ -131,29 +148,23 @@ class GameEnvironment:
     def get_state_meanings():
         return STATE_MEANING
 
-    def is_alive(self):
-        return self._check_frame.isAlive()
-
 
 class CheckFrame(threading.Thread):
     def __init__(self, grpc_client, need_human_ob):
         threading.Thread.__init__(self)
         self.grpc_client = grpc_client
         self.timer = None
-        self.refresh_observation = RefreshObservation(self.grpc_client, need_human_ob)
+        self.need_human_ob = need_human_ob
 
     def run(self):
         global frame_index
         check_frame = self.grpc_client.get_frame_index().frame
         if check_frame > frame_index:
-            start_time = int(round(time.time() * 1000))
             frame_lock.acquire_write()
             frame_index = check_frame
             frame_lock.release()
-            print("write_frame_index time:" + str(int(round(time.time() * 1000)) - start_time))
-            start_time = int(round(time.time() * 1000))
-            self.refresh_observation.run()
-            print("refresh_observation time:" + str(int(round(time.time() * 1000)) - start_time))
+            refresh_observation = RefreshObservation(self.grpc_client, self.need_human_ob)
+            refresh_observation.start()
         timer = threading.Timer(0.005, self.run)
         timer.start()
 
@@ -167,14 +178,18 @@ class RefreshObservation(threading.Thread):
     def run(self):
         global frame_index, human_observation, location_observation, \
             immutable_element_observation, mutable_element_observation, bodies_observation, \
-            asset_ownership_observation, self_asset_observation, pointer_observation, observation_state
+            asset_ownership_observation, self_asset_observation, pointer_observation, \
+            observation_state, score_inform, kill_inform, heath_inform
 
-        observation_response = self.grpc_client.get_observations()
-        frame_lock.acquire_read()
-        frame_index = observation_response.frame_index
-        frame_lock.release()
+        response = self.grpc_client.get_observations_with_info()
 
-        layered_observation = observation_response.layered_observation
+        inform_lock.acquire_write()
+        score_inform = response.score
+        kill_inform = response.kills
+        heath_inform = response.heath
+        inform_lock.release()
+
+        layered_observation = response.layered_observation
 
         """to np array"""
         location = to_np_array(layered_observation.location)
@@ -187,11 +202,11 @@ class RefreshObservation(threading.Thread):
         pointer = to_np_array(layered_observation.pointer)
         human = None
         if self.need_human_ob:
-            human = to_np_array(observation_response.humanObservation)
+            human = to_np_array(response.humanObservation)
 
         """write"""
         observation_lock.acquire_write()
-        observation_state = observation_response.state
+        observation_state = response.state
         location_observation = location
         immutable_element_observation = immutable_element
         mutable_element_observation = mutable_element

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='org.seekloud.esheepapi.pb',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\rservice.proto\x12\x19org.seekloud.esheepapi.pb\x1a\tapi.proto2\x98\x07\n\x0b\x45sheepAgent\x12`\n\ncreateRoom\x12(.org.seekloud.esheepapi.pb.CreateRoomReq\x1a(.org.seekloud.esheepapi.pb.CreateRoomRsp\x12X\n\x08joinRoom\x12&.org.seekloud.esheepapi.pb.JoinRoomReq\x1a$.org.seekloud.esheepapi.pb.SimpleRsp\x12T\n\tleaveRoom\x12!.org.seekloud.esheepapi.pb.Credit\x1a$.org.seekloud.esheepapi.pb.SimpleRsp\x12[\n\x0b\x61\x63tionSpace\x12!.org.seekloud.esheepapi.pb.Credit\x1a).org.seekloud.esheepapi.pb.ActionSpaceRsp\x12Y\n\nsystemInfo\x12!.org.seekloud.esheepapi.pb.Credit\x1a(.org.seekloud.esheepapi.pb.SystemInfoRsp\x12T\n\x06\x61\x63tion\x12$.org.seekloud.esheepapi.pb.ActionReq\x1a$.org.seekloud.esheepapi.pb.ActionRsp\x12[\n\x0bobservation\x12!.org.seekloud.esheepapi.pb.Credit\x1a).org.seekloud.esheepapi.pb.ObservationRsp\x12Q\n\x06inform\x12!.org.seekloud.esheepapi.pb.Credit\x1a$.org.seekloud.esheepapi.pb.InformRsp\x12X\n\rreincarnation\x12!.org.seekloud.esheepapi.pb.Credit\x1a$.org.seekloud.esheepapi.pb.SimpleRsp\x12_\n\x0c\x63urrentFrame\x12!.org.seekloud.esheepapi.pb.Credit\x1a*.org.seekloud.esheepapi.pb.CurrentFrameRsp0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\rservice.proto\x12\x19org.seekloud.esheepapi.pb\x1a\tapi.proto2\x83\x08\n\x0b\x45sheepAgent\x12`\n\ncreateRoom\x12(.org.seekloud.esheepapi.pb.CreateRoomReq\x1a(.org.seekloud.esheepapi.pb.CreateRoomRsp\x12X\n\x08joinRoom\x12&.org.seekloud.esheepapi.pb.JoinRoomReq\x1a$.org.seekloud.esheepapi.pb.SimpleRsp\x12T\n\tleaveRoom\x12!.org.seekloud.esheepapi.pb.Credit\x1a$.org.seekloud.esheepapi.pb.SimpleRsp\x12[\n\x0b\x61\x63tionSpace\x12!.org.seekloud.esheepapi.pb.Credit\x1a).org.seekloud.esheepapi.pb.ActionSpaceRsp\x12Y\n\nsystemInfo\x12!.org.seekloud.esheepapi.pb.Credit\x1a(.org.seekloud.esheepapi.pb.SystemInfoRsp\x12T\n\x06\x61\x63tion\x12$.org.seekloud.esheepapi.pb.ActionReq\x1a$.org.seekloud.esheepapi.pb.ActionRsp\x12[\n\x0bobservation\x12!.org.seekloud.esheepapi.pb.Credit\x1a).org.seekloud.esheepapi.pb.ObservationRsp\x12k\n\x13observationWithInfo\x12!.org.seekloud.esheepapi.pb.Credit\x1a\x31.org.seekloud.esheepapi.pb.ObservationWithInfoRsp\x12Q\n\x06inform\x12!.org.seekloud.esheepapi.pb.Credit\x1a$.org.seekloud.esheepapi.pb.InformRsp\x12X\n\rreincarnation\x12!.org.seekloud.esheepapi.pb.Credit\x1a$.org.seekloud.esheepapi.pb.SimpleRsp\x12]\n\x0c\x63urrentFrame\x12!.org.seekloud.esheepapi.pb.Credit\x1a*.org.seekloud.esheepapi.pb.CurrentFrameRspb\x06proto3')
   ,
   dependencies=[api__pb2.DESCRIPTOR,])
 
@@ -37,7 +37,7 @@ _ESHEEPAGENT = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=56,
-  serialized_end=976,
+  serialized_end=1083,
   methods=[
   _descriptor.MethodDescriptor(
     name='createRoom',
@@ -103,9 +103,18 @@ _ESHEEPAGENT = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
+    name='observationWithInfo',
+    full_name='org.seekloud.esheepapi.pb.EsheepAgent.observationWithInfo',
+    index=7,
+    containing_service=None,
+    input_type=api__pb2._CREDIT,
+    output_type=api__pb2._OBSERVATIONWITHINFORSP,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
     name='inform',
     full_name='org.seekloud.esheepapi.pb.EsheepAgent.inform',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=api__pb2._CREDIT,
     output_type=api__pb2._INFORMRSP,
@@ -114,7 +123,7 @@ _ESHEEPAGENT = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='reincarnation',
     full_name='org.seekloud.esheepapi.pb.EsheepAgent.reincarnation',
-    index=8,
+    index=9,
     containing_service=None,
     input_type=api__pb2._CREDIT,
     output_type=api__pb2._SIMPLERSP,
@@ -123,7 +132,7 @@ _ESHEEPAGENT = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='currentFrame',
     full_name='org.seekloud.esheepapi.pb.EsheepAgent.currentFrame',
-    index=9,
+    index=10,
     containing_service=None,
     input_type=api__pb2._CREDIT,
     output_type=api__pb2._CURRENTFRAMERSP,
