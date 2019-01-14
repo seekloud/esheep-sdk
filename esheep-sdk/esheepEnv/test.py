@@ -1,7 +1,5 @@
-from grpc_client import GrpcClient
-import actions_pb2 as action
-import api_pb2 as api
 import time
+from game_env import GameEnvironment
 import random
 
 
@@ -10,35 +8,36 @@ port = '5322'
 
 
 def run():
-    env = GrpcClient(ip=ip,
-                      port=port,
-                      api_token="test")
-
-    rsp = env.create_room("123")
-    print(rsp.room_id)
-    actionSpace = env.get_action_space()
-    print(actionSpace.move)
-    # time.sleep(10000)
-    actionList = [action.down, action.up, action.left, action.right]
+    env = GameEnvironment(ip=ip, port=port, api_token="test")
+    roomid, state = env.create_room("123")
+    print("roomid:" + str(roomid))
+    print("state:" + str(state))
+    move, swing, fire, apply = env.get_action_space()
     for i in range(0, 400):
-        obs = env.get_observations()
-        if obs.state == api.in_game:
+        frame, \
+        state, \
+        location, \
+        immutable_element, \
+        mutable_element, \
+        bodies, \
+        asset_ownership, \
+        self_asset, \
+        asset_status, \
+        pointer, \
+        score, \
+        kill, \
+        health = env.get_observation_with_info()
+        print("frame:"+str(frame))
+        if state == 1:
             print('in_game')
-            actionIndex = random.randint(0, 3)
-            actionChoose = actionList[actionIndex]
-            actionRsp = env.submit_action(actionChoose, None, None, None)
-            print(actionRsp)
-        elif obs.state == api.killed:
+            action_choose = move[random.randint(0, 3)]
+            env.submit_action(frame, action_choose, None, None, None)
+        elif state == 2:
             print('killed')
             rsp = env.submit_reincarnation()
             print(rsp)
         else:
-            print('cannot get state:', obs.state)
-        print("\n")
-        print(str(obs.human_observation.width) + "\n")
-        print(str(obs.human_observation.height) + "\n")
-        print(str(obs.human_observation.pixel_length) + "\n")
-        print(str(type(obs.human_observation.data)) + "\n")
+            print('get state:', state)
 
         time.sleep(0.15)
 

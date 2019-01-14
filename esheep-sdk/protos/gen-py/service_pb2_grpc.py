@@ -49,6 +49,11 @@ class EsheepAgentStub(object):
         request_serializer=api__pb2.Credit.SerializeToString,
         response_deserializer=api__pb2.ObservationRsp.FromString,
         )
+    self.observationWithInfo = channel.unary_unary(
+        '/org.seekloud.esheepapi.pb.EsheepAgent/observationWithInfo',
+        request_serializer=api__pb2.Credit.SerializeToString,
+        response_deserializer=api__pb2.ObservationWithInfoRsp.FromString,
+        )
     self.inform = channel.unary_unary(
         '/org.seekloud.esheepapi.pb.EsheepAgent/inform',
         request_serializer=api__pb2.Credit.SerializeToString,
@@ -59,7 +64,7 @@ class EsheepAgentStub(object):
         request_serializer=api__pb2.Credit.SerializeToString,
         response_deserializer=api__pb2.SimpleRsp.FromString,
         )
-    self.currentFrame = channel.unary_stream(
+    self.currentFrame = channel.unary_unary(
         '/org.seekloud.esheepapi.pb.EsheepAgent/currentFrame',
         request_serializer=api__pb2.Credit.SerializeToString,
         response_deserializer=api__pb2.CurrentFrameRsp.FromString,
@@ -113,6 +118,13 @@ class EsheepAgentServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def observation(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def observationWithInfo(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -178,6 +190,11 @@ def add_EsheepAgentServicer_to_server(servicer, server):
           request_deserializer=api__pb2.Credit.FromString,
           response_serializer=api__pb2.ObservationRsp.SerializeToString,
       ),
+      'observationWithInfo': grpc.unary_unary_rpc_method_handler(
+          servicer.observationWithInfo,
+          request_deserializer=api__pb2.Credit.FromString,
+          response_serializer=api__pb2.ObservationWithInfoRsp.SerializeToString,
+      ),
       'inform': grpc.unary_unary_rpc_method_handler(
           servicer.inform,
           request_deserializer=api__pb2.Credit.FromString,
@@ -188,7 +205,7 @@ def add_EsheepAgentServicer_to_server(servicer, server):
           request_deserializer=api__pb2.Credit.FromString,
           response_serializer=api__pb2.SimpleRsp.SerializeToString,
       ),
-      'currentFrame': grpc.unary_stream_rpc_method_handler(
+      'currentFrame': grpc.unary_unary_rpc_method_handler(
           servicer.currentFrame,
           request_deserializer=api__pb2.Credit.FromString,
           response_serializer=api__pb2.CurrentFrameRsp.SerializeToString,
