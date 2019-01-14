@@ -2,7 +2,7 @@ from grpc_client import GrpcClient
 import threading
 from utils import to_np_array
 from rw_lock import RWLock
-import time
+import api_pb2 as api
 
 frame_index = 0
 frame_lock = RWLock()
@@ -37,6 +37,7 @@ class GameEnvironment:
         self.last_action_frame = 0
         self.max_containable_step = max_containable_step
         self._action_space = None
+        self._reincarnation_flag = True
 
     def create_room(self, password):
         rsp = self.grpc_client.create_room(password)
@@ -64,9 +65,13 @@ class GameEnvironment:
         return inform.score, inform.kills, inform.health, inform.state, inform.frame_index
 
     def submit_reincarnation(self):
-        rsp = self.grpc_client.submit_reincarnation()
-        if rsp.err_code == 0:
-            return rsp.state
+        if self._reincarnation_flag:
+            rsp = self.grpc_client.submit_reincarnation()
+            if rsp.err_code == 0:
+                self._reincarnation_flag = False
+                return rsp.state
+            else:
+                return None
         else:
             return None
 
@@ -109,6 +114,9 @@ class GameEnvironment:
         kill = kill_inform
         heath = heath_inform
         inform_lock.release()
+
+        if state == api.in_game and self._reincarnation_flag is False:
+            self._reincarnation_flag = True
 
         if self.need_human_ob:
             return frame, \
