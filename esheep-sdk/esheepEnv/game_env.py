@@ -78,7 +78,7 @@ class GameEnvironment:
     def submit_action(self, frame, move, swing, fire, apply):
         """read"""
         frame_lock.acquire_read()
-        current_frame = frame
+        current_frame = frame_index
         frame_lock.release()
         if self.last_action_frame < frame and frame > current_frame - self.max_containable_step:
             rsp = self.grpc_client.submit_action(move, swing, fire, apply)
@@ -163,14 +163,12 @@ class CheckFrame(threading.Thread):
         self.grpc_client = grpc_client
         self.timer = None
         self.need_human_ob = need_human_ob
+        self.last_frame = 0
 
     def run(self):
-        global frame_index
         check_frame = self.grpc_client.get_frame_index().frame
-        if check_frame > frame_index:
-            frame_lock.acquire_write()
-            frame_index = check_frame
-            frame_lock.release()
+        if check_frame > self.last_frame:
+            self.last_frame = check_frame
             refresh_observation = RefreshObservation(self.grpc_client, self.need_human_ob)
             refresh_observation.start()
         timer = threading.Timer(0.005, self.run)
@@ -190,6 +188,10 @@ class RefreshObservation(threading.Thread):
             observation_state, score_inform, kill_inform, heath_inform
 
         response = self.grpc_client.get_observations_with_info()
+
+        frame_lock.acquire_write()
+        frame_index = response.frame_index
+        frame_lock.release()
 
         inform_lock.acquire_write()
         score_inform = response.score

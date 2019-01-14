@@ -4,7 +4,7 @@ import random
 
 
 ip = '127.0.0.1'
-port = '5322'
+port = '5321'
 
 
 def run():
@@ -39,7 +39,7 @@ def run():
         else:
             print('get state:', state)
 
-        time.sleep(0.15)
+        time.sleep(0.1)
 
     # rsp = env.leave_room()
     # print(rsp)
