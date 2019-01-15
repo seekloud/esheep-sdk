@@ -219,11 +219,7 @@ class GrpcClient:
         ):
             if response:
                 if self.debug:
-                    self.log_file.write("get_frame_index response," + "\t" +
-                                        "errCode:" + str(response.err_code) + "\t" +
-                                        "msg:" + str(response.msg) + "\t" +
-                                        "state:" + str(response.state) + "\t" +
-                                        "frame:" + str(response.frame_index) + "\n")
+                    self.log_file.write("frame:" + str(response.frame) + "\n")
                 return response
             else:
                 if self.debug:
