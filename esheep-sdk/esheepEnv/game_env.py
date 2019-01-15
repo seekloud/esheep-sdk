@@ -173,7 +173,7 @@ class CheckFrame(threading.Thread):
             frame_lock.release()
             refresh_observation = RefreshObservation(self.grpc_client, self.need_human_ob)
             refresh_observation.start()
-        timer = threading.Timer(0.005, self.run)
+        timer = threading.Timer(0.040, self.run)
         timer.start()
 
 
