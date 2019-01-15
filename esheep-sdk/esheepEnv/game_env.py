@@ -29,13 +29,15 @@ class GameEnvironment:
     def __init__(self, ip, port, api_token,
                  need_human_ob=False,
                  max_containable_step=10,
+                 check_frame_time=0.005,
                  logfile_path='./',
                  debug=False):
         self.grpc_client = GrpcClient(ip, port, api_token, logfile_path, debug)
-        self._check_frame = CheckFrame(self.grpc_client, need_human_ob)
         self.need_human_ob = need_human_ob
-        self.last_action_frame = 0
         self.max_containable_step = max_containable_step
+        self._last_action_frame = 0
+        self._frame_period = None
+        self._check_frame = CheckFrame(self.grpc_client, need_human_ob, check_frame_time)
         self._action_space = None
         self._reincarnation_flag = True
 
@@ -64,6 +66,11 @@ class GameEnvironment:
         inform = self.grpc_client.get_inform()
         return inform.score, inform.kills, inform.health, inform.state, inform.frame_index
 
+    def get_frame_period(self):
+        if self._frame_period is not None:
+            self._frame_period = self.grpc_client.get_system_info().frame_period
+        return self._frame_period
+
     def submit_reincarnation(self):
         if self._reincarnation_flag:
             rsp = self.grpc_client.submit_reincarnation()
@@ -80,10 +87,10 @@ class GameEnvironment:
         frame_lock.acquire_read()
         current_frame = frame_index
         frame_lock.release()
-        if self.last_action_frame < frame and frame > current_frame - self.max_containable_step:
+        if self._last_action_frame < frame and frame > current_frame - self.max_containable_step:
             rsp = self.grpc_client.submit_action(move, swing, fire, apply)
             if rsp.err_code == 0:
-                self.last_action_frame = frame
+                self._last_action_frame = frame
                 return rsp.state
             else:
                 return None
@@ -158,11 +165,11 @@ class GameEnvironment:
 
 
 class CheckFrame(threading.Thread):
-    def __init__(self, grpc_client, need_human_ob):
+    def __init__(self, grpc_client, need_human_ob, check_frame_time):
         threading.Thread.__init__(self)
         self.grpc_client = grpc_client
-        self.timer = None
         self.need_human_ob = need_human_ob
+        self.check_frame_time = check_frame_time
         self.last_frame = 0
 
     def run(self):
@@ -171,7 +178,7 @@ class CheckFrame(threading.Thread):
             self.last_frame = check_frame
             refresh_observation = RefreshObservation(self.grpc_client, self.need_human_ob)
             refresh_observation.start()
-        timer = threading.Timer(0.005, self.run)
+        timer = threading.Timer(self.check_frame_time, self.run)
         timer.start()
 
 
