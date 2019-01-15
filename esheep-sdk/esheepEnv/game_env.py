@@ -67,7 +67,7 @@ class GameEnvironment:
         return inform.score, inform.kills, inform.health, inform.state, inform.frame_index
 
     def get_frame_period(self):
-        if self._frame_period is not None:
+        if self._frame_period is None:
             self._frame_period = self.grpc_client.get_system_info().frame_period
         return self._frame_period
 
@@ -196,44 +196,49 @@ class RefreshObservation(threading.Thread):
 
         response = self.grpc_client.get_observations_with_info()
 
-        frame_lock.acquire_write()
-        frame_index = response.frame_index
+        frame_lock.acquire_read()
+        current_frame = frame_index
         frame_lock.release()
 
-        inform_lock.acquire_write()
-        score_inform = response.score
-        kill_inform = response.kills
-        heath_inform = response.heath
-        inform_lock.release()
+        if response.frame_index > current_frame:
+            frame_lock.acquire_write()
+            frame_index = response.frame_index
+            frame_lock.release()
 
-        layered_observation = response.layered_observation
+            inform_lock.acquire_write()
+            score_inform = response.score
+            kill_inform = response.kills
+            heath_inform = response.heath
+            inform_lock.release()
 
-        """to np array"""
-        location = to_np_array(layered_observation.location)
-        immutable_element = to_np_array(layered_observation.immutable_element)
-        mutable_element = to_np_array(layered_observation.mutable_element)
-        bodies = to_np_array(layered_observation.bodies)
-        asset_ownership = to_np_array(layered_observation.asset_ownership)
-        self_asset = to_np_array(layered_observation.self_asset)
-        asset_status = to_np_array(layered_observation.self_status)
-        pointer = to_np_array(layered_observation.pointer)
-        human = None
-        if self.need_human_ob:
-            human = to_np_array(response.humanObservation)
+            layered_observation = response.layered_observation
 
-        """write"""
-        observation_lock.acquire_write()
-        observation_state = response.state
-        location_observation = location
-        immutable_element_observation = immutable_element
-        mutable_element_observation = mutable_element
-        bodies_observation = bodies
-        asset_ownership_observation = asset_ownership
-        self_asset_observation = self_asset
-        asset_ownership_observation = asset_status
-        pointer_observation = pointer
-        human_observation = human
-        observation_lock.release()
+            """to np array"""
+            location = to_np_array(layered_observation.location)
+            immutable_element = to_np_array(layered_observation.immutable_element)
+            mutable_element = to_np_array(layered_observation.mutable_element)
+            bodies = to_np_array(layered_observation.bodies)
+            asset_ownership = to_np_array(layered_observation.asset_ownership)
+            self_asset = to_np_array(layered_observation.self_asset)
+            asset_status = to_np_array(layered_observation.self_status)
+            pointer = to_np_array(layered_observation.pointer)
+            human = None
+            if self.need_human_ob:
+                human = to_np_array(response.humanObservation)
+
+            """write"""
+            observation_lock.acquire_write()
+            observation_state = response.state
+            location_observation = location
+            immutable_element_observation = immutable_element
+            mutable_element_observation = mutable_element
+            bodies_observation = bodies
+            asset_ownership_observation = asset_ownership
+            self_asset_observation = self_asset
+            asset_ownership_observation = asset_status
+            pointer_observation = pointer
+            human_observation = human
+            observation_lock.release()
 
 
 MOVE_MEANING = {
