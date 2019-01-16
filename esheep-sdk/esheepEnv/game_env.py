@@ -32,7 +32,7 @@ class GameEnvironment:
                  logfile_path='./',
                  debug=False):
         self.grpc_client = GrpcClient(ip, port, api_token, logfile_path, debug)
-        self._check_frame = CheckFrame(self.grpc_client, need_human_ob)
+        # self._check_frame = CheckFrame(self.grpc_client, need_human_ob)
         self.need_human_ob = need_human_ob
         self.last_action_frame = 0
         self.max_containable_step = max_containable_step
@@ -42,7 +42,7 @@ class GameEnvironment:
     def create_room(self, password):
         rsp = self.grpc_client.create_room(password)
         if rsp.err_code == 0:
-            self._check_frame.start()
+            # self._check_frame.start()
             return rsp.room_id, rsp.state
         else:
             return None

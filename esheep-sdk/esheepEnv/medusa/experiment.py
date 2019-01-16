@@ -39,9 +39,9 @@ class Experiment(object):
                                     model_file=PRE_TRAIN_MODEL_FILE,
                                     is_dueling=IS_DUELING,
                                     )
-        self.game = GameEnvironment(game=GAME_NAME,
-                            obs_type=OBSERVATION_TYPE,
-                            frame_skip=FRAME_SKIP)
+        ip = '127.0.0.1'
+        port = '5321'
+        self.game = GameEnvironment(ip=ip, port=port, api_token="test")
 
         self.player = Player(self.game,
                              self.q_learning,
@@ -57,17 +57,17 @@ class Experiment(object):
         self.testing = testing
 
     def start_train(self):
+        self.game.create_room("123")
         for i in range(1, EPOCH_NUM + 1):
             self._run_epoch(i)
         print('train done.')
-        self.game.close()
 
     def start_test(self):
         # assert PRE_TRAIN_MODEL_FILE is not None
+        self.game.create_room("123")
         for i in range(1, EPOCH_NUM + 1):
             self._run_epoch(i)
         print('test done.')
-        self.game.close()
 
     def _run_epoch(self, epoch):
         steps_left = EPOCH_LENGTH
