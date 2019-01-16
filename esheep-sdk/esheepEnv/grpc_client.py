@@ -213,15 +213,3 @@ class GrpcClient:
                 self.log_file.write("get_system_info error:can't get response." + "\n")
             sys.exit('Error when get system info')
 
-    def get_frame_index(self):
-        for response in self.stub.currentFrame(
-            messages.Credit(api_token=self.api_token)
-        ):
-            if response:
-                if self.debug:
-                    self.log_file.write("frame:" + str(response.frame) + "\n")
-                return response
-            else:
-                if self.debug:
-                    self.log_file.write("get_system_info error:can't get response." + "\n")
-                sys.exit('Error when get frame index')

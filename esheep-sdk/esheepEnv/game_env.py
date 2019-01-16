@@ -3,6 +3,7 @@ import threading
 from utils import to_np_array
 from rw_lock import RWLock
 import api_pb2 as api
+import api_pb2 as messages
 
 frame_index = 0
 frame_lock = RWLock()
@@ -36,14 +37,14 @@ class GameEnvironment:
         self.max_containable_step = max_containable_step
         self._frame_period = self.grpc_client.get_system_info().frame_period
         self._last_action_frame = 0
-        self._refresh_obs = RefreshObservation(self.grpc_client, need_human_ob, self._frame_period)
+        self._check_frame = CheckFrame(self.grpc_client, need_human_ob)
         self._action_space = None
         self._reincarnation_flag = True
 
     def create_room(self, password):
         rsp = self.grpc_client.create_room(password)
         if rsp.err_code == 0:
-            self._refresh_obs.start()
+            self._check_frame.start()
             return rsp.room_id, rsp.state
         else:
             return None
@@ -51,7 +52,7 @@ class GameEnvironment:
     def join_room(self, room_id, password):
         rsp = self.grpc_client.join_room(room_id, password)
         if rsp.err_code == 0:
-            self._refresh_obs.start()
+            self._check_frame.start()
             return rsp.state
         else:
             return None
@@ -161,12 +162,27 @@ class GameEnvironment:
         return STATE_MEANING
 
 
-class RefreshObservation(threading.Thread):
-    def __init__(self, grpc_client, need_human_ob, refresh_time):
+class CheckFrame(threading.Thread):
+    def __init__(self, grpc_client, need_human_ob):
         threading.Thread.__init__(self)
         self.grpc_client = grpc_client
         self.need_human_ob = need_human_ob
-        self.refresh_obs_time = refresh_time
+        self.last_frame = 0
+
+    def run(self):
+        stream = self.grpc_client.stub.currentFrame(messages.Credit(api_token=self.grpc_client.api_token))
+        for response in stream:
+            if response.frame > self.last_frame:
+                self.last_frame = response.frame
+                refresh_obs = RefreshObservation(self.grpc_client, self.need_human_ob)
+                refresh_obs.start()
+
+
+class RefreshObservation(threading.Thread):
+    def __init__(self, grpc_client, need_human_ob):
+        threading.Thread.__init__(self)
+        self.grpc_client = grpc_client
+        self.need_human_ob = need_human_ob
 
     def run(self):
         global frame_index, human_observation, location_observation, \
@@ -219,24 +235,6 @@ class RefreshObservation(threading.Thread):
             pointer_observation = pointer
             human_observation = human
             observation_lock.release()
-        timer = threading.Timer((self.refresh_obs_time - 10) / 1000, self.run)
-        timer.start()
-
-
-class CheckFrame(threading.Thread):
-    def __init__(self, grpc_client, need_human_ob, check_frame_time):
-        threading.Thread.__init__(self)
-        self.grpc_client = grpc_client
-        self.need_human_ob = need_human_ob
-        self.check_frame_time = check_frame_time
-        self.last_frame = 0
-
-    def run(self):
-        check_frame = self.grpc_client.get_frame_index().frame
-        if check_frame > self.last_frame:
-            self.last_frame = check_frame
-            refresh_observation = RefreshObservation(self.grpc_client, self.need_human_ob)
-            refresh_observation.start()
 
 
 MOVE_MEANING = {
