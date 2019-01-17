@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="esheep-sdk",
-    version="0.0.1-alpha1",
+    version="0.0.1-alpha2",
     author="seekloud",
     author_email="zta@outlook.com",
     description="sdk for esheep api(https://github.com/seekloud/esheep-api).",

@@ -3,6 +3,7 @@ import threading
 from utils import to_np_array
 from rw_lock import RWLock
 import api_pb2 as api
+import api_pb2 as messages
 
 frame_index = 0
 frame_lock = RWLock()
@@ -32,17 +33,18 @@ class GameEnvironment:
                  logfile_path='./',
                  debug=False):
         self.grpc_client = GrpcClient(ip, port, api_token, logfile_path, debug)
-        # self._check_frame = CheckFrame(self.grpc_client, need_human_ob)
         self.need_human_ob = need_human_ob
-        self.last_action_frame = 0
         self.max_containable_step = max_containable_step
+        self._frame_period = self.grpc_client.get_system_info().frame_period
+        self._last_action_frame = 0
+        self._check_frame = CheckFrame(self.grpc_client, need_human_ob)
         self._action_space = None
         self._reincarnation_flag = True
 
     def create_room(self, password):
         rsp = self.grpc_client.create_room(password)
         if rsp.err_code == 0:
-            # self._check_frame.start()
+            self._check_frame.start()
             return rsp.room_id, rsp.state
         else:
             return None
@@ -64,6 +66,9 @@ class GameEnvironment:
         inform = self.grpc_client.get_inform()
         return inform.score, inform.kills, inform.health, inform.state, inform.frame_index
 
+    def get_frame_period(self):
+        return self._frame_period
+
     def submit_reincarnation(self):
         if self._reincarnation_flag:
             rsp = self.grpc_client.submit_reincarnation()
@@ -78,12 +83,12 @@ class GameEnvironment:
     def submit_action(self, frame, move, swing, fire, apply):
         """read"""
         frame_lock.acquire_read()
-        current_frame = frame
+        current_frame = frame_index
         frame_lock.release()
-        if self.last_action_frame < frame and frame > current_frame - self.max_containable_step:
+        if self._last_action_frame < frame and frame > current_frame - self.max_containable_step:
             rsp = self.grpc_client.submit_action(move, swing, fire, apply)
             if rsp.err_code == 0:
-                self.last_action_frame = frame
+                self._last_action_frame = frame
                 return rsp.state
             else:
                 return None
@@ -161,20 +166,16 @@ class CheckFrame(threading.Thread):
     def __init__(self, grpc_client, need_human_ob):
         threading.Thread.__init__(self)
         self.grpc_client = grpc_client
-        self.timer = None
         self.need_human_ob = need_human_ob
+        self.last_frame = 0
 
     def run(self):
-        global frame_index
-        check_frame = self.grpc_client.get_frame_index().frame
-        if check_frame > frame_index:
-            frame_lock.acquire_write()
-            frame_index = check_frame
-            frame_lock.release()
-            refresh_observation = RefreshObservation(self.grpc_client, self.need_human_ob)
-            refresh_observation.start()
-        timer = threading.Timer(0.040, self.run)
-        timer.start()
+        stream = self.grpc_client.stub.currentFrame(messages.Credit(api_token=self.grpc_client.api_token))
+        for response in stream:
+            if response.frame > self.last_frame:
+                self.last_frame = response.frame
+                refresh_obs = RefreshObservation(self.grpc_client, self.need_human_ob)
+                refresh_obs.start()
 
 
 class RefreshObservation(threading.Thread):
@@ -191,40 +192,49 @@ class RefreshObservation(threading.Thread):
 
         response = self.grpc_client.get_observations_with_info()
 
-        inform_lock.acquire_write()
-        score_inform = response.score
-        kill_inform = response.kills
-        heath_inform = response.heath
-        inform_lock.release()
+        frame_lock.acquire_read()
+        current_frame = frame_index
+        frame_lock.release()
 
-        layered_observation = response.layered_observation
+        if response.frame_index > current_frame:
+            frame_lock.acquire_write()
+            frame_index = response.frame_index
+            frame_lock.release()
 
-        """to np array"""
-        location = to_np_array(layered_observation.location)
-        immutable_element = to_np_array(layered_observation.immutable_element)
-        mutable_element = to_np_array(layered_observation.mutable_element)
-        bodies = to_np_array(layered_observation.bodies)
-        asset_ownership = to_np_array(layered_observation.asset_ownership)
-        self_asset = to_np_array(layered_observation.self_asset)
-        asset_status = to_np_array(layered_observation.self_status)
-        pointer = to_np_array(layered_observation.pointer)
-        human = None
-        if self.need_human_ob:
-            human = to_np_array(response.humanObservation)
+            inform_lock.acquire_write()
+            score_inform = response.score
+            kill_inform = response.kills
+            heath_inform = response.heath
+            inform_lock.release()
 
-        """write"""
-        observation_lock.acquire_write()
-        observation_state = response.state
-        location_observation = location
-        immutable_element_observation = immutable_element
-        mutable_element_observation = mutable_element
-        bodies_observation = bodies
-        asset_ownership_observation = asset_ownership
-        self_asset_observation = self_asset
-        asset_ownership_observation = asset_status
-        pointer_observation = pointer
-        human_observation = human
-        observation_lock.release()
+            layered_observation = response.layered_observation
+
+            """to np array"""
+            location = to_np_array(layered_observation.location)
+            immutable_element = to_np_array(layered_observation.immutable_element)
+            mutable_element = to_np_array(layered_observation.mutable_element)
+            bodies = to_np_array(layered_observation.bodies)
+            asset_ownership = to_np_array(layered_observation.asset_ownership)
+            self_asset = to_np_array(layered_observation.self_asset)
+            asset_status = to_np_array(layered_observation.self_status)
+            pointer = to_np_array(layered_observation.pointer)
+            human = None
+            if self.need_human_ob:
+                human = to_np_array(response.humanObservation)
+
+            """write"""
+            observation_lock.acquire_write()
+            observation_state = response.state
+            location_observation = location
+            immutable_element_observation = immutable_element
+            mutable_element_observation = mutable_element
+            bodies_observation = bodies
+            asset_ownership_observation = asset_ownership
+            self_asset_observation = self_asset
+            asset_ownership_observation = asset_status
+            pointer_observation = pointer
+            human_observation = human
+            observation_lock.release()
 
 
 MOVE_MEANING = {

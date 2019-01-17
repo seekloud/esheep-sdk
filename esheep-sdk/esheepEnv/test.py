@@ -12,6 +12,7 @@ def run():
     roomid, state = env.create_room("123")
     print("roomid:" + str(roomid))
     print("state:" + str(state))
+    frame_period = env.get_frame_period()
     move, swing, fire, apply = env.get_action_space()
     for i in range(0, 400):
         frame, \
@@ -39,7 +40,7 @@ def run():
         else:
             print('get state:', state)
 
-        time.sleep(0.1)
+        time.sleep(frame_period/1000)
 
     # rsp = env.leave_room()
     # print(rsp)
