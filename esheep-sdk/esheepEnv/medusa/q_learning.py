@@ -40,7 +40,7 @@ class QLearning(object):
         out = self.policy_net(state)
         self.epsilon = epsilon
         max_index = nd.argmax(out, axis=1)
-        action = max_index.astype(np.int).asscalar()
+        action = int(max_index.astype(np.int).asscalar())
         # print('state:', state)
         # print('state s:', state.shape)
         # print('out:', out)
