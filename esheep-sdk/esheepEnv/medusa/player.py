@@ -18,6 +18,7 @@ class Player(object):
         self.epsilon_rate = (EPSILON_START - EPSILON_MIN) * 1.0 / EPSILON_DECAY
         self.move, self.swing, self.fire, self.apply = self.game.get_action_space()
         self.last_score = 0
+        self.last_frame = 0
 
     def run_episode(self, epoch, replay_buffer, random_action=False, testing=False):
         episode_step = 0
@@ -52,7 +53,17 @@ class Player(object):
             score, \
             kill, \
             health = self.game.get_observation_with_info()
-
+            if frame == self.last_frame:
+                time.sleep(0.01)
+                continue
+            self.last_frame = frame
+            print(location.shape)
+            print(immutable_element.shape)
+            print(mutable_element.shape)
+            print(bodies.shape)
+            print(asset_ownership.shape)
+            print(self_asset.shape)
+            print(asset_status.shape)
             st = np.concatenate((location, immutable_element, mutable_element, bodies,
                                  asset_ownership, self_asset, asset_status), axis=-1)
             action, max_q = self._choose_action(st, replay_buffer, testing, random_action)

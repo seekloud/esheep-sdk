@@ -5,9 +5,7 @@
 
 
 import time
-import gym
 import numpy as np
-from gym.envs.atari import AtariEnv
 
 from medusa.player import Player
 

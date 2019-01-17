@@ -25,7 +25,7 @@ def load_conf(conf_file):
 
     config = configparser.ConfigParser(allow_no_value=True, interpolation=configparser.ExtendedInterpolation())
 
-    config.read(default_conf_file)
+    # config.read(default_conf_file)
     config.read(conf_file)
     return config['DQN']
 
