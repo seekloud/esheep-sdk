@@ -66,6 +66,7 @@ class QLearning(object):
 
         Returns: average loss
         """
+        t0 = time.time()
         batch_size = actions.shape[0]
 
         states = imgs[:, :-1, :, :, :]
@@ -112,6 +113,8 @@ class QLearning(object):
 
         self.trainer.step(batch_size)
         total_loss = loss.mean().asscalar()
+        t1 = time.time()
+        print("train spend time: %.2fs" % (t1 - t0))
         return total_loss
 
     def q_vals(self, sample_batch):
