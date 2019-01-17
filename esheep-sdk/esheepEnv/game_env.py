@@ -192,9 +192,7 @@ class RefreshObservation(threading.Thread):
 
         response = self.grpc_client.get_observations_with_info()
 
-        current_frame = frame_index
-
-        if response.frame_index > current_frame:
+        if response.frame_index > frame_index:
             frame_lock.acquire_write()
             frame_index = response.frame_index
             frame_lock.release()
@@ -214,7 +212,7 @@ class RefreshObservation(threading.Thread):
             bodies = to_np_array(layered_observation.bodies)
             asset_ownership = to_np_array(layered_observation.asset_ownership)
             self_asset = to_np_array(layered_observation.self_asset)
-            asset_status = to_np_array(layered_observation.self_status)
+            asset_status = to_np_array(layered_observation.asset_status)
             pointer = to_np_array(layered_observation.pointer)
             human = None
             if self.need_human_ob:
