@@ -192,9 +192,7 @@ class RefreshObservation(threading.Thread):
 
         response = self.grpc_client.get_observations_with_info()
 
-        frame_lock.acquire_read()
         current_frame = frame_index
-        frame_lock.release()
 
         if response.frame_index > current_frame:
             frame_lock.acquire_write()
