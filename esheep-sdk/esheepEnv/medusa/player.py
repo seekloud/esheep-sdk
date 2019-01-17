@@ -25,11 +25,10 @@ class Player(object):
         episode_reword = 0
         train_count = 0
         loss_sum = 0
-        distance_sum = 0.0
-        episode_score = 0.0
         q_sum = 0.0
         q_count = 0
         need_start = True
+        self.last_score = 0
 
         # do no operation steps.
         # max_no_op_steps = 10
@@ -48,33 +47,26 @@ class Player(object):
             bodies, \
             asset_ownership, \
             self_asset, \
-            asset_status, \
+            self_status, \
             pointer, \
             score, \
             kill, \
             health = self.game.get_observation_with_info()
-            if frame == self.last_frame:
+            if frame == self.last_frame or location.shape[2] == 0:
                 time.sleep(0.01)
                 continue
             self.last_frame = frame
-            print(location.shape)
-            print(immutable_element.shape)
-            print(mutable_element.shape)
-            print(bodies.shape)
-            print(asset_ownership.shape)
-            print(self_asset.shape)
-            print(asset_status.shape)
             st = np.concatenate((location, immutable_element, mutable_element, bodies,
-                                 asset_ownership, self_asset, asset_status), axis=-1)
+                                 asset_ownership, self_asset, self_status), axis=-1)
             action, max_q = self._choose_action(st, replay_buffer, testing, random_action)
             if max_q is not None:
                 q_count += 1
                 q_sum += max_q
-            move = self.move[action]
-            self.game.submit_action(frame, move)
+            move = self.move[int(action)]
+            self.game.submit_action(frame, move, None, None, None)
             reward = 0.1
             if score > self.last_score:
-                reward = 1
+                reward += 1
                 self.last_score = score
             if state == 2:
                 reward -= 5
@@ -85,16 +77,15 @@ class Player(object):
             replay_buffer.add_sample(st, action, reward, terminal)
             episode_step += 1
             episode_reword += reward
-            episode_score += score
+            episode_score = score
             if terminal:
                 break
 
             if not testing and episode_step % TRAIN_PER_STEP == 0 and not random_action:
                 # print('-- train_policy_net episode_step=%d' % episode_step)
                 imgs, actions, rs, terminal = replay_buffer.random_batch(32)
-                loss, distance = self.q_learning.train_policy_net(imgs, actions, rs, terminal)
+                loss = self.q_learning.train_policy_net(imgs, actions, rs, terminal)
                 loss_sum += loss
-                distance_sum += distance
                 train_count += 1
 
         return episode_step, episode_reword, episode_score, loss_sum / (train_count + 0.0000001), q_sum / (

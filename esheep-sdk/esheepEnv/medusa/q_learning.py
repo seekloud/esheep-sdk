@@ -49,7 +49,6 @@ class QLearning(object):
         # print('max_index s:', max_index.shape)
         # print('action:', action)
         # print('action type:', type(action))
-
         max_q = out[0, action].asscalar()
         return action, max_q
 
