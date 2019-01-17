@@ -4,7 +4,7 @@ import random
 
 
 ip = '127.0.0.1'
-port = '5321'
+port = '5322'
 
 
 def run():
@@ -23,7 +23,7 @@ def run():
         bodies, \
         asset_ownership, \
         self_asset, \
-        asset_status, \
+        self_status, \
         pointer, \
         score, \
         kill, \

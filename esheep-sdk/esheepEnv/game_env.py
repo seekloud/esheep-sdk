@@ -15,7 +15,7 @@ mutable_element_observation = None
 bodies_observation = None
 asset_ownership_observation = None
 self_asset_observation = None
-asset_status_observation = None
+self_status_observation = None
 pointer_observation = None
 observation_state = None
 observation_lock = RWLock()
@@ -105,7 +105,7 @@ class GameEnvironment:
         bodies = bodies_observation
         asset_ownership = asset_ownership_observation
         self_asset = self_asset_observation
-        asset_status = asset_status_observation
+        self_status = self_status_observation
         pointer = pointer_observation
         human = human_observation
         observation_lock.release()
@@ -132,7 +132,7 @@ class GameEnvironment:
                    bodies, \
                    asset_ownership, \
                    self_asset, \
-                   asset_status, \
+                   self_status, \
                    pointer, \
                    human, \
                    score, \
@@ -148,7 +148,7 @@ class GameEnvironment:
                    bodies, \
                    asset_ownership, \
                    self_asset, \
-                   asset_status, \
+                   self_status, \
                    pointer, \
                    score, \
                    kill, \
@@ -187,8 +187,8 @@ class RefreshObservation(threading.Thread):
     def run(self):
         global frame_index, human_observation, location_observation, \
             immutable_element_observation, mutable_element_observation, bodies_observation, \
-            asset_ownership_observation, self_asset_observation, pointer_observation, \
-            observation_state, score_inform, kill_inform, heath_inform
+            asset_ownership_observation, self_asset_observation, self_status_observation,\
+            pointer_observation, observation_state, score_inform, kill_inform, heath_inform
 
         response = self.grpc_client.get_observations_with_info()
 
@@ -212,7 +212,7 @@ class RefreshObservation(threading.Thread):
             bodies = to_np_array(layered_observation.bodies)
             asset_ownership = to_np_array(layered_observation.asset_ownership)
             self_asset = to_np_array(layered_observation.self_asset)
-            asset_status = to_np_array(layered_observation.asset_status)
+            self_status = to_np_array(layered_observation.self_status)
             pointer = to_np_array(layered_observation.pointer)
             human = None
             if self.need_human_ob:
@@ -227,7 +227,7 @@ class RefreshObservation(threading.Thread):
             bodies_observation = bodies
             asset_ownership_observation = asset_ownership
             self_asset_observation = self_asset
-            asset_ownership_observation = asset_status
+            self_status_observation = self_status
             pointer_observation = pointer
             human_observation = human
             observation_lock.release()
