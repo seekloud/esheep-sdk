@@ -3,6 +3,7 @@
 # Time  : 12:22 PM
 # FileName: player.py
 
+import api_pb2 as api
 import numpy as np
 from medusa.config import *
 
@@ -36,9 +37,13 @@ class Player(object):
         #     st, _, _, _, _ = self.game.step(0)
 
         while True:
-            if need_start:
+            while need_start:
+                time.sleep(0.5)
                 self.game.submit_reincarnation()
-                need_start = False
+                time.sleep(0.5)
+                _, state, _, _, _, _, _, _, _, _, _, _, _ = self.game.get_observation_with_info()
+                if state == api.in_game:
+                    need_start = False
             frame, \
             state, \
             location, \
@@ -52,7 +57,7 @@ class Player(object):
             score, \
             kill, \
             health = self.game.get_observation_with_info()
-            if frame == self.last_frame or location.shape[2] == 0:
+            if frame == self.last_frame or location is None or location.shape[2] == 0:
                 time.sleep(0.01)
                 continue
             self.last_frame = frame
@@ -68,7 +73,7 @@ class Player(object):
             if score > self.last_score:
                 reward += 1
                 self.last_score = score
-            if state == 2:
+            if health == 0:
                 reward -= 5
                 need_start = True
                 terminal = True
