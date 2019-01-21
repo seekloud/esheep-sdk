@@ -196,3 +196,19 @@ class GrpcClient:
                 self.log_file.write("get_system_info error:can't get response." + "\n")
             sys.exit('Error when get system info')
 
+    def get_observations_with_info(self):
+        response = self.stub.observationWithInfo(
+            messages.Credit(api_token=self.api_token)
+        )
+        if response:
+            if self.debug:
+                self.log_file.write("get_observations_with_info response," + "\t" +
+                                    "errCode:" + str(response.err_code) + "\t" +
+                                    "msg:" + str(response.msg) + "\t" +
+                                    "state:" + str(response.state) + "\t" +
+                                    "frame_index" + str(response.frame_index) + "\n")
+            return response
+        else:
+            if self.debug:
+                self.log_file.write("get_observations_with_info error:can't get response." + "\n")
+            sys.exit('Error when get observation with info')
