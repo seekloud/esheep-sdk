@@ -2,7 +2,6 @@ from grpc_client import GrpcClient
 import threading
 from utils import to_np_array
 from rw_lock import RWLock
-import api_pb2 as api
 import api_pb2 as messages
 
 frame_index = 0
@@ -70,13 +69,9 @@ class GameEnvironment:
         return self._frame_period
 
     def submit_reincarnation(self):
-        if self._reincarnation_flag:
-            rsp = self.grpc_client.submit_reincarnation()
-            if rsp.err_code == 0:
-                self._reincarnation_flag = False
-                return rsp.state
-            else:
-                return None
+        rsp = self.grpc_client.submit_reincarnation()
+        if rsp.err_code == 0:
+            return rsp.state
         else:
             return None
 
@@ -119,9 +114,6 @@ class GameEnvironment:
         kill = kill_inform
         heath = heath_inform
         inform_lock.release()
-
-        if state == api.in_game and self._reincarnation_flag is False:
-            self._reincarnation_flag = True
 
         if self.need_human_ob:
             return frame, \
