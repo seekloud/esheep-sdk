@@ -23,7 +23,7 @@ service EsheepAgent {
 
   rpc observation (Credit) returns (ObservationRsp);
 
-  rpc observationWithInfo (Credit) returns (ObservationWithInfoRsp);
+  rpc observationWithInfo (Credit) returns (stream ObservationWithInfoRsp);
 
   rpc inform (Credit) returns (InformRsp);
 
