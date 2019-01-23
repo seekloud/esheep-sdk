@@ -67,8 +67,11 @@ class Player(object):
             if max_q is not None:
                 q_count += 1
                 q_sum += max_q
-            move = self.move[int(action)]
-            self.game.submit_action(frame, move, None, None, None)
+            if action == 0:
+                self.game.submit_action(frame, None, None, None, None)
+            else:
+                move = self.move[int(action-1)]
+                self.game.submit_action(frame, move, None, None, None)
             reward = 0.1
             if score > self.last_score:
                 reward += 1
