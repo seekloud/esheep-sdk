@@ -5,9 +5,9 @@
 
 import numpy as np
 from mxnet import init, nd, autograd, gluon
-import medusa.dueling_dqn as dueling_dqn
-import medusa.utils as g_utils
-from medusa.config import *
+import example.medusa.algorithm1.dueling_dqn as dueling_dqn
+import example.medusa.algorithm1.utils as g_utils
+from example.medusa.algorithm1.config import *
 
 
 class QLearning(object):

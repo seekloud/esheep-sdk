@@ -1,8 +1,6 @@
-import numpy as np
-import mxnet as mx
-from mxnet import init, nd, autograd, gluon
-from mxnet.gluon import data as gdata, nn, loss as gloss
-from medusa.config import *
+from mxnet import nd
+from mxnet.gluon import nn
+from example.medusa.algorithm1.config import *
 
 
 class DuelingDQN(nn.Sequential):

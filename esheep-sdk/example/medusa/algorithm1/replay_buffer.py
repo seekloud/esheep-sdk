@@ -11,11 +11,10 @@
 construct randomly selected batches of phi's from the stored history.
 """
 import numpy as np
-import time
 
 floatX = 'float32'
 
-from medusa.config import DISCOUNT, PHI_LENGTH
+from example.medusa.algorithm1.config import PHI_LENGTH
 
 
 class ReplayBuffer(object):

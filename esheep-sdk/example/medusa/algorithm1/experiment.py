@@ -4,20 +4,16 @@
 # FileName: experiment.py
 
 
-import time
 import numpy as np
-
-from medusa.player import Player
-
+from example.medusa.algorithm1.player import Player
 from game_env import GameEnvironment
-from medusa.replay_buffer import ReplayBuffer
-from medusa.q_learning import QLearning
-from medusa import utils
+from example.medusa.algorithm1.replay_buffer import ReplayBuffer
+from example.medusa.algorithm1.q_learning import QLearning
+from example.medusa.algorithm1 import utils
 import mxnet as mx
 from mxnet import nd
-import medusa.ztutils as ztutils
-
-from medusa.config import *
+import example.medusa.algorithm1.ztutils as ztutils
+from example.medusa.algorithm1.config import *
 
 
 class Experiment(object):

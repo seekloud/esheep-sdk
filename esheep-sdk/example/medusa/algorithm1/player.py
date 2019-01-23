@@ -5,7 +5,7 @@
 
 import api_pb2 as api
 import numpy as np
-from medusa.config import *
+from example.medusa.algorithm1.config import *
 
 
 class Player(object):
