@@ -4,7 +4,7 @@ import random
 
 
 ip = '127.0.0.1'
-port = '5321'
+port = '5322'
 
 
 def run():
@@ -30,6 +30,8 @@ def run():
         health = env.get_observation_with_info()
         print("frame:"+str(frame))
         if state == 1:
+            if mutable_element is not None:
+                env.show_image(mutable_element)
             print('in_game')
             action_choose = move[random.randint(0, 3)]
             env.submit_action(frame, action_choose, None, None, None)

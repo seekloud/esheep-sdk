@@ -3,6 +3,8 @@ import threading
 from utils import to_np_array
 from rw_lock import RWLock
 import api_pb2 as messages
+import matplotlib.pyplot as plt
+import numpy as np
 
 frame_index = 0
 frame_lock = RWLock()
@@ -149,9 +151,17 @@ class GameEnvironment:
     def get_move_meanings(self):
         return [MOVE_MEANING[i] for i in self._action_space.move]
 
+    def show_image(self, image, height=100, width=200):
+        plt.close('all')
+        image_array = np.array(image).reshape(height, width)
+        plt.imshow(image_array, cmap='gray')
+        plt.show()
+
     @staticmethod
     def get_state_meanings():
         return STATE_MEANING
+
+
 
 
 class CheckFrame(threading.Thread):
